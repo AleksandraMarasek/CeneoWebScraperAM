@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+{%block title%}Extrakcja opinii{% endblock %}
+<form action="" method="POST" class="container">
+    <div class="row g-3 align-items-center">
+        <div class="col-auto">
+            <label for="product_id" class="col-form-label">Podaj kod produktu</label>
+        </div>
+        <div class="col-auto">
+            <input type="text" name="product_id" class="form-control" aria-describedby="product_id" required>
+        </div>
+        <div class="col-auto">
+            <span id="product_id" class="form-text">
+                Kod produktu musi zawierać 5-10 cyfr.
+            </span>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary mb-3">Pobierz opinie</button>
+        </div>
+
+    </div>
+</form>
+{% if error is defined %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>O NIE!!</strong> {{error}}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
+{% endblock %}
