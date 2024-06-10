@@ -97,7 +97,17 @@ def author():
 
 @app.route('/product/<product_id>')
 def product(product_id):
-    return render_template("product.html", product_id=product_id)
+    with open(f"app/data/opinions/{product_id}.json", "r", encoding="UTF-8") as jf:
+        opinions_data = json.load(jf)
+    
+    opinions_df = pd.DataFrame(opinions_data)
+
+    sort_by = request.args.get('sort_by')
+    if sort_by in opinions_df.columns:
+        opinions_df = opinions_df.sort_values(by=sort_by)
+
+    return render_template('product.html', product_id=product_id, opinions=opinions_df.to_html(classes='table table-striped', index=False))
+
 
 @app.route('/product/download_json/<product_id>')
 def download_json(product_id):
