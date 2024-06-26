@@ -85,11 +85,28 @@ def extract():
 def products():
     products_list = [filename.split(".")[0] for filename in os.listdir("app/data/opinions")]
     products = []
+    
     for product_id in products_list:
         with open(f"app/data/stats/{product_id}.json", "r", encoding="UTF-8") as jf:
-            products.append(json.load(jf))
+            product_stats = json.load(jf)
+            products.append(product_stats)
     
-    return render_template("products.html", products = products)
+    sort_by = request.args.get('sort_by', 'product_name')
+    order = request.args.get('order', 'asc')
+
+    # Tworzenie DataFrame z listy produktów
+    df = pd.DataFrame(products)
+
+    # Sortowanie danych za pomocą Pandas
+    if order == 'desc':
+        df_sorted = df.sort_values(by=sort_by, ascending=False)
+    else:
+        df_sorted = df.sort_values(by=sort_by, ascending=True)
+
+    # Konwersja DataFrame z powrotem na listę słowników
+    sorted_products = df_sorted.to_dict(orient='records')
+
+    return render_template('products.html', products=sorted_products, sort_by=sort_by, order=order)
 
 @app.route('/author')
 def author():
