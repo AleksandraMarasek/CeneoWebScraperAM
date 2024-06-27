@@ -21,6 +21,9 @@ body {
     right: 0;
 }
 
+.table-text-color {
+    color: rgb(202, 180, 180);
+}
 
 
 .content {

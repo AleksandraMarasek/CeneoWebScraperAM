@@ -119,11 +119,13 @@ def product(product_id):
     
     opinions_df = pd.DataFrame(opinions_data)
 
-    sort_by = request.args.get('sort_by')
-    if sort_by in opinions_df.columns:
-        opinions_df = opinions_df.sort_values(by=sort_by)
+    sort_by = request.args.get('sort_by', default='review_date')
+    order = request.args.get('order', default='asc')
 
-    return render_template('product.html', product_id=product_id, opinions=opinions_df.to_html(classes='table table-striped', index=False))
+    if sort_by in opinions_df.columns:
+        opinions_df = opinions_df.sort_values(by=sort_by, ascending=(order == 'asc'))
+
+    return render_template('product.html', product_id=product_id, opinions=opinions_df)
 
 
 @app.route('/product/download_json/<product_id>')
